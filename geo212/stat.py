@@ -145,5 +145,4 @@ def standard_deviation(data: List[int|float]) -> int|float:
     -------
     The standard deviation of the list of numbers.
     """
-    s2 = variance(data)
-    return s2**.5
+    variance(data)**.5
