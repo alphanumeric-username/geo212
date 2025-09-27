@@ -129,7 +129,7 @@ def variance(data: List[int|float]) -> int|float:
     """
     n = len(data)
     avg = average(data)
-    return average((data - avg)**2) * n/(n-1)
+    return average([(d - avg)**2 for d in data]) * n/(n-1)
 
 
 def standard_deviation(data: List[int|float]) -> int|float:
