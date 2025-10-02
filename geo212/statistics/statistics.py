@@ -1,5 +1,6 @@
 from typing import List, Dict
-from .algorithm import merge_sort
+from geo212.algorithm import merge_sort
+
 
 __all__ = [
     'mode',
@@ -7,6 +8,8 @@ __all__ = [
     'average',
     'median',
     'standard_deviation',
+    'covariance',
+    'correlation'
 ]
 
 def mode(data: List[int|float]) -> List[int|float]:
@@ -88,6 +91,8 @@ def average(data: List[int|float]) -> int|float:
     """
     sum = 0
     n = len(data)
+    if n == 0:
+        return 0
     for i in range(n):
         sum += data[i]
     return sum/n
@@ -146,3 +151,64 @@ def standard_deviation(data: List[int|float]) -> int|float:
     The standard deviation of the list of numbers.
     """
     variance(data)**.5
+
+
+def covariance(data_x: List[int|float], data_y: List[int|float]) -> float|int:
+    """
+    Computes the covariance between two lists of numbers.
+
+    Parameters
+    ----------
+    data_x : List[int|float]
+        The first list. Must have the same length as `data_y`
+    data_y : List[int|float]
+        The second list. Must have the same length as `data_x`
+
+    Returns
+    -------
+    The covariance between `data_x` and `data_y`.
+    """
+    if len(data_x) != len(data_y):
+        raise ValueError(f'`data_x` and `data_y` does not have the same length:\
+                          `data_x` has length {len(data_x)} while `data_y` has length {len(data_y)}')
+
+    n = len(data_x)
+    Ex = average(data_x)
+    Ey = average(data_y)
+
+    return average([ (x - Ex)*(y - Ey) for x, y in zip(data_x, data_y) ]) * n/(n-1)
+
+
+def correlation(data_x: List[int|float], data_y: List[int|float]) -> float|int:
+    """
+    Computes the correlation between two lists of numbers.
+
+    Parameters
+    ----------
+    data_x : List[int|float]
+        The first list. Must have the same length as `data_y`
+    data_y : List[int|float]
+        The second list. Must have the same length as `data_x`
+
+    Returns
+    -------
+    The correlation between `data_x` and `data_y`.
+    """
+    sx = standard_deviation(data_x)
+    sy = standard_deviation(data_y)
+    return covariance(data_x, data_y)/(sx * sy)
+
+
+def correlation_matrix(data: Dict[str, List[int | float]]):
+    keys = list(data.keys())
+    n = len(keys)
+    # MCor = np.zeros((n, n))
+    MCor = [[ 0 for i in range(n)] for j in range(n)]
+
+    for c in range(len(keys)):
+        for r in range(len(keys)):
+            kx = keys[r]
+            ky = keys[c]
+            MCor[r, c] = correlation(data[kx], data[ky])
+
+    return MCor
