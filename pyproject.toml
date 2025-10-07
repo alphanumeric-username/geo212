@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geo212"
+version = "0.0.1"
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib"
+]
+
+[tool.setuptools.packages.find]
+include = ["geo212", "geo212.statistics"]
